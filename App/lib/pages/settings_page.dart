@@ -2,6 +2,7 @@ import 'package:bytegarden/classes/device.dart';
 import 'package:bytegarden/resources/colors.dart';
 import 'package:bytegarden/services/garden_service.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 
@@ -254,6 +255,8 @@ class _SettingsPageState extends State<SettingsPage>
       _onLoading(device.getName());
       if (await service.connect(device)) {
         var d = await service.getDevices();
+        await Hive.box('settings')
+            .put('favorite_device', [device.getName(), device.address]);
         setState(() {
           devices = d;
         });

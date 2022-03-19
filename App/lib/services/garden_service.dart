@@ -80,8 +80,8 @@ class GardenService {
     var result = false;
     try {
       var connection = await BluetoothConnection.toAddress(device.address);
-      device = GardenDevice(device.name, device.address, connection.isConnected,
-          device.isBonded, connection);
+      this.device = GardenDevice(device.name, device.address,
+          connection.isConnected, device.isBonded, connection);
       result = true;
     } catch (e) {
       print('Error connecting to device - $e');

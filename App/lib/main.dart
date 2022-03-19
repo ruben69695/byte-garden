@@ -1,9 +1,37 @@
+import 'package:bytegarden/data/air_humidity.dart';
+import 'package:bytegarden/data/air_temperature.dart';
+import 'package:bytegarden/data/ground_humidity.dart';
 import 'package:bytegarden/pages/home_page.dart';
 import 'package:bytegarden/resources/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
+void main() async {
+  await initHive();
   runApp(const MyApp());
+}
+
+Future initHive() async {
+  await Hive.initFlutter();
+  registerHiveAdapters();
+  await openHiveBoxes();
+}
+
+Future openHiveBoxes() async {
+  await Future.wait([
+    Hive.openBox('settings'),
+    Hive.openBox('air_humidity'),
+    Hive.openBox('air_temperature'),
+    Hive.openBox('ground_humidity')
+  ]);
+  // var box = await Hive.openBox('settings');
+  // print(box.get('favorite_device'));
+}
+
+void registerHiveAdapters() {
+  Hive.registerAdapter(AirHumidityAdapter());
+  Hive.registerAdapter(AirTemperatureAdapter());
+  Hive.registerAdapter(GroundHumidityAdapter());
 }
 
 class MyApp extends StatelessWidget {
